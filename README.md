@@ -3,7 +3,7 @@
 
 This repository contains the code to train the **Fall Recovery And Stand-up Agent (FRASA)** using reinforcement learning (RL) algorithms. Training is conducted in a *MuJoCo* environment with the *stable-baselines3* library. The agent is designed to recover from falls and stand up from both prone and supine positions.
 
-The methodology and results of this work are detailed in [this paper](https://arxiv.org/pdf/2410.08655), and a comprehensive video presentation is available [here](https://www.youtube.com/watch?v=NL65XW0O0mk).
+The methodology and results of this work are detailed in [this paper](https://arxiv.org/pdf/2410.08655), and a comprehensive video presentation is available [here](https://youtu.be/VRgBEy0yhfU).
 
 The platform used for this project is the *Sigmaban humanoid robot*, developed by the *Rhoban Team*. The performance of the trained agent has been validated on the physical robot, as demonstrated in the examples below:
 
