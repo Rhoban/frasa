@@ -28,7 +28,7 @@ class StandupEnv(gymnasium.Env):
             "render_realtime": True,
             # Target robot state (q_motors, tilt) [rad^6]
             # [elbow, shoulder_pitch, hip_pitch, knee, ankle_pitch, IMU_pitch]
-            "desired_state": np.deg2rad([-49.5, 19.5, -52, 79, -36.5, -8.5]),
+            "desired_state": np.deg2rad([-49.5, 19.5, -52, 79, -36.5, 8.5]),
             # Probability of seeding the robot in finale position
             "reset_final_p": 0.1,
             # Termination conditions
@@ -179,7 +179,7 @@ class StandupEnv(gymnasium.Env):
 
     def get_tilt(self) -> float:
         R = self.trunk_site.xmat
-        return np.arctan2(R[6], R[8])
+        return -np.arctan2(R[6], R[8])
 
     def get_observation(self) -> np.ndarray:
         # Retrieving joints
@@ -289,7 +289,6 @@ class StandupEnv(gymnasium.Env):
         obs = self.get_observation()
 
         state_current = [*self.q_history[-1], self.tilt_history[-1]]
-
         reward = np.exp(-20 * (np.linalg.norm(np.array(state_current) - np.array(self.options["desired_state"])) ** 2))
 
         action_variation = np.abs(action - self.previous_actions[-1])
@@ -388,16 +387,16 @@ class StandupEnv(gymnasium.Env):
             initial_q[4] -= offset
 
         initial_q = np.clip(initial_q, self.range_low, self.range_high)
-        self.apply_control(initial_q)
 
         # Set the robot initial pose
+        self.apply_control(initial_q, True)
         self.sim.step()
+
         initial_tilt = self.np_random.uniform(-np.pi / 2, np.pi / 2)
         if target:
             initial_tilt = my_target[-1]
         T_world_trunk = tf.rotation_matrix(initial_tilt, [0, 1, 0])
         T_world_trunk[:3, 3] = [0, 0, 0.4]
-
         self.sim.set_T_world_site("trunk", T_world_trunk)
 
         # Wait for the robot to stabilize

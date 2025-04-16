@@ -11,7 +11,7 @@ import frasa_env
 
 gym.register_envs(frasa_env)
 
-argparser = argparse.ArgumentParser(description="Test the sigmaban-standup-v0 environment")
+argparser = argparse.ArgumentParser(description="Test the frasa-standup-v0 environment")
 argparser.add_argument("--env", type=str, default="frasa-standup-v0", help="Environment to test")
 argparser.add_argument("--random", action="store_true", help="Use random actions instead of zeros")
 argparser.add_argument("--normal", action="store_true", help="Use normal action noise")
@@ -52,7 +52,7 @@ while True:
     returns += reward
     env.render()
 
-    if done or trucated:
+    if done or trucated or step > 30:
         status = "truncated" if trucated else "done"
         print(f"Episode finished ({status}) after {step} steps, returns: {returns}")
         step = 0
